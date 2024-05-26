@@ -4,6 +4,10 @@ import https, { Agent } from "node:https";
 import prompts from "prompts";
 import * as fs from "fs";
 import { isPathExists, mp3ToPCM, pcmToMP3, safeJoin } from "./util/common.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 console.clear();
 https.globalAgent = new Agent({ keepAlive: true });
 const exitOnCancel = (state) => {
@@ -34,7 +38,7 @@ const { INPUT_FILE_PATH, DOWNLOAD_DIR, FACTOR } = await prompts([
         onState: exitOnCancel,
     },
 ]);
-const pcmFilePath = "src/buffer.pcm";
+const pcmFilePath = `${__dirname}/buffer.pcm`;
 (async function modifyVolume(input, output, factor) {
     await mp3ToPCM(input, pcmFilePath);
     console.clear();
