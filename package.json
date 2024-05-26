@@ -1,0 +1,28 @@
+{
+  "name": "volume",
+  "version": "1.0.0",
+  "description": "modify volume of audio file",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "bin": {
+    "volume": "dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HtetAungKhant23/Volume.git"
+  },
+  "keywords": [
+    "audio",
+    "file",
+    "modify",
+    "volume"
+  ],
+  "author": "Htet Aung Khant",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HtetAungKhant23/Volume/issues"
+  },
+  "homepage": "https://github.com/HtetAungKhant23/Volume#readme"
+}
