@@ -1,5 +1,5 @@
 {
-  "name": "mod-vol",
+  "name": "modi-vol",
   "version": "1.0.0",
   "description": "modify volume of audio file",
   "main": "dist/index.js",
