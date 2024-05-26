@@ -17,11 +17,11 @@
 ### Usage
 
 ```s
-$ npx mod-vol
+$ npx modi-vol
 ```
 
 or via pnpm
 
 ```s
-$ pnpm dlx mod-vol
+$ pnpm dlx modi-vol
 ```
