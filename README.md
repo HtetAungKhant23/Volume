@@ -2,6 +2,8 @@
 
 - allowing you to increase or decrease the volume of audio data.
 
+![gif](./assets/modi-vol.gif)
+
 ### Features
 
 - Read and write PCM files
