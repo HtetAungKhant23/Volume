@@ -24,5 +24,13 @@
   "bugs": {
     "url": "https://github.com/HtetAungKhant23/Volume/issues"
   },
-  "homepage": "https://github.com/HtetAungKhant23/Volume#readme"
+  "homepage": "https://github.com/HtetAungKhant23/Volume#readme",
+  "dependencies": {
+    "prompts": "^2.4.2",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/prompts": "^2.4.9"
+  }
 }
