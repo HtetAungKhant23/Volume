@@ -48,7 +48,6 @@ const pcmFilePath: string = `${__dirname}/buffer.pcm`;
 
 (async function modifyVolume(input: string, output: string, factor: number) {
   await mp3ToPCM(input, pcmFilePath);
-  console.clear();
 
   fs.readFile(pcmFilePath, (err: any, data: Buffer) => {
     if (err) {
@@ -56,11 +55,15 @@ const pcmFilePath: string = `${__dirname}/buffer.pcm`;
       return;
     }
 
+    console.log("before buffer", data);
+
     for (let i = 0; i < data.length; i += 2) {
       let sample = data.readInt16LE(i);
       sample = Math.max(Math.min(sample * factor, 32767), -32768);
       data.writeInt16LE(sample, i);
     }
+
+    console.log("\nafter buffer ", data);
 
     fs.writeFile(pcmFilePath, data, async (err: any) => {
       if (err) {
@@ -68,8 +71,9 @@ const pcmFilePath: string = `${__dirname}/buffer.pcm`;
         return;
       }
 
+      console.log("output path ", output);
+
       await pcmToMP3(pcmFilePath, output);
-      console.clear();
       console.log("Finished✅");
     });
   });
