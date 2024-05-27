@@ -11,8 +11,6 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-console.clear();
-
 https.globalAgent = new Agent({ keepAlive: true });
 
 const exitOnCancel = (state: any) => {
