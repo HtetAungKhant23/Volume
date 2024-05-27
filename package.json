@@ -1,6 +1,6 @@
 {
   "name": "modi-vol",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "modify volume of audio file",
   "main": "dist/index.js",
   "type": "module",
