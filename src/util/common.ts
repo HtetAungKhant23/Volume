@@ -1,7 +1,7 @@
 import os from "node:os";
 import fs from "node:fs/promises";
 import { join } from "node:path";
-import { execSync } from "child_process";
+import { Lame } from "../../node_modules/node-lame/index.js";
 
 export const isPathExists = async (
   path: string,
@@ -30,20 +30,44 @@ export const safeJoin = (...path: string[]): string => {
   return join(...path);
 };
 
-export const mp3ToPCM = async (mp3Path: string, pcmPath: string) => {
-  try {
-    execSync(`lame --decode ${mp3Path} ${pcmPath}`);
-  } catch (error) {
-    console.error("Error decoding MP3 to PCM:", error);
-    return;
-  }
+export const fileToBuffer = async (file: string) => {
+  const decoder = new Lame({
+    output: "buffer",
+  }).setFile(file);
+
+  return await decoder
+    .decode()
+    .then(() => {
+      const buffer = decoder.getBuffer();
+      return buffer;
+    })
+    .catch((error) => {
+      console.log("decode err", error);
+    });
 };
 
-export const pcmToMP3 = async (pcmPath: string, mp3Path: string) => {
-  try {
-    execSync(`lame -r -s 44.1 -b 192 ${pcmPath} ${mp3Path}`);
-  } catch (error) {
-    console.error("Error encoding PCM to MP3:", error);
-    return;
+export const bufferToFile = async (outputFilePath: string, buffer: Buffer) => {
+  const encoder = new Lame({
+    output: outputFilePath,
+    raw: true,
+    bitrate: 192,
+    resample: 44.1,
+  }).setBuffer(buffer);
+
+  await encoder
+    .encode()
+    .then(() => {
+      console.log("Finished✅");
+    })
+    .catch((error) => {
+      console.log("encode err", error);
+    });
+};
+
+export const updateBuffer = async (buffer: Buffer, factor: string) => {
+  for (let i = 0; i < buffer.length; i += 2) {
+    let sample = buffer.readInt16LE(i);
+    sample = Math.max(Math.min(sample * parseFloat(factor), 32767), -32768);
+    buffer.writeInt16LE(sample, i);
   }
 };

@@ -3,13 +3,13 @@
 import os from "node:os";
 import https, { Agent } from "node:https";
 import prompts from "prompts";
-import * as fs from "fs";
-import { isPathExists, mp3ToPCM, pcmToMP3, safeJoin } from "./util/common.js";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import {
+  bufferToFile,
+  fileToBuffer,
+  isPathExists,
+  safeJoin,
+  updateBuffer,
+} from "./util/common.js";
 
 https.globalAgent = new Agent({ keepAlive: true });
 
@@ -42,37 +42,8 @@ const { INPUT_FILE_PATH, DOWNLOAD_DIR, FACTOR } = await prompts([
   },
 ]);
 
-const pcmFilePath: string = `${__dirname}/buffer.pcm`;
-
-(async function modifyVolume(input: string, output: string, factor: number) {
-  await mp3ToPCM(input, pcmFilePath);
-
-  fs.readFile(pcmFilePath, (err: any, data: Buffer) => {
-    if (err) {
-      console.error("Error reading PCM file:", err);
-      return;
-    }
-
-    console.log("before buffer", data);
-
-    for (let i = 0; i < data.length; i += 2) {
-      let sample = data.readInt16LE(i);
-      sample = Math.max(Math.min(sample * factor, 32767), -32768);
-      data.writeInt16LE(sample, i);
-    }
-
-    console.log("\nafter buffer ", data);
-
-    fs.writeFile(pcmFilePath, data, async (err: any) => {
-      if (err) {
-        console.error("Error writing PCM file:", err);
-        return;
-      }
-
-      console.log("output path ", output);
-
-      await pcmToMP3(pcmFilePath, output);
-      console.log("Finished✅");
-    });
-  });
+(async function modifyVolume(input: string, output: string, factor: string) {
+  const buffer: Buffer = (await fileToBuffer(input)) as unknown as Buffer;
+  await updateBuffer(buffer, factor);
+  await bufferToFile(output, buffer);
 })(INPUT_FILE_PATH, safeJoin(DOWNLOAD_DIR, "/output.mp3"), FACTOR);
